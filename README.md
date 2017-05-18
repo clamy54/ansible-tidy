@@ -81,6 +81,13 @@ Size is not evaluated for directories.</td>
 <td><ul><li>atime</li><li>mtime</li><li>ctime</li></ul></td>
 <td>Set the mechanism for determining age. Default is atime.</td>
 </tr>
+<tr>
+<td>number</td>
+<td>no</td>
+<td>0</td>
+<td></td>
+<td>>Tidy files which are over a determined number (in other words, keep x files in each folder, delete all the others). Files are ordered before tidying up, using the `timestamp` param, so you can delete older files. Specifying 0 will remove all files.</td>
+</tr>
 </table>  
 
 
@@ -98,6 +105,9 @@ Size is not evaluated for directories.</td>
 
 # Delete on /var/log files equal or greater than 10 megabytes ending with .log or .log.gz
 - tidy: path="/var/tmp" matches="*.log","*.log.gz" size="10m"
+
+# Keep 10 files in /var/service/logs, delete all the others
+- tidy: path="/var/service/logs" number="10"
 ```
 
 
