@@ -1,0 +1,11 @@
+---
+- hosts: all
+
+  roles:
+    - role: ansible-tidy
+
+  vars:
+    tidy_path: tests/files
+    tidy_local_action: true
+    tidy_recurse: true
+    tidy_number: 2

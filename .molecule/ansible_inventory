@@ -1,0 +1,5 @@
+[all]
+ansible-tidy ansible_connection=docker
+
+[group1]
+ansible-tidy
