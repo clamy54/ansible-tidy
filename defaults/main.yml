@@ -1,12 +1,2 @@
 ---
 # defaults file for tidy-files
-- tidy:
-    age: "{{ tidy_age | default(omit) }}"
-    force: "{{ tidy_force | default(omit) }}"
-    matches: "{{ tidy_matches | default(omit) }}"
-    path: "{{ tidy_path | mandatory }}"
-    recurse: "{{ tidy_recurse | default(omit) }}"
-    rmdirs: "{{ tidy_rmdirs | default(omit) }}"
-    silent: "{{ tidy_silent | default(omit) }}"
-    size: "{{ tidy_size | default(omit) }}"
-    timestamp: "{{ tidy_timestamp | default(omit) }}"

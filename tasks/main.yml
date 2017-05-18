@@ -1,2 +1,30 @@
 ---
 # tasks file for tidy-files
+- name: "Run tidy locally"
+  local_action: 
+    module: tidy
+    age: "{{ tidy_age | default(omit) }}"
+    force: "{{ tidy_force | default(omit) }}"
+    matches: "{{ tidy_matches | default(omit) }}"
+    path: "{{ tidy_path | mandatory }}"
+    recurse: "{{ tidy_recurse | default(omit) }}"
+    rmdirs: "{{ tidy_rmdirs | default(omit) }}"
+    silent: "{{ tidy_silent | default(omit) }}"
+    size: "{{ tidy_size | default(omit) }}"
+    timestamp: "{{ tidy_timestamp | default(omit) }}"
+    number: "{{ tidy_number | default(omit) }}"
+  when: tidy_local_action is defined and tidy_local_action == true
+
+- name: "Run tidy remotely"
+  tidy:
+    age: "{{ tidy_age | default(omit) }}"
+    force: "{{ tidy_force | default(omit) }}"
+    matches: "{{ tidy_matches | default(omit) }}"
+    path: "{{ tidy_path | mandatory }}"
+    recurse: "{{ tidy_recurse | default(omit) }}"
+    rmdirs: "{{ tidy_rmdirs | default(omit) }}"
+    silent: "{{ tidy_silent | default(omit) }}"
+    size: "{{ tidy_size | default(omit) }}"
+    timestamp: "{{ tidy_timestamp | default(omit) }}"
+    number: "{{ tidy_number | default(omit) }}"
+  when: tidy_local_action is not defined or (tidy_local_action is defined and tidy_local_action == false)
