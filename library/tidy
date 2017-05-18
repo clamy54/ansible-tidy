@@ -132,12 +132,25 @@ def sizefilter(path, size=0):
         return True
     return False
 
+def numberfilter(path, current_number, limit_number=0):
+    '''filter files whose count is bigger limit_number'''
+    if limit_number == 0 or current_number > limit_number:
+        return True
+    return False
+
+def sortFiles(root, timestamp="atime"):
+    def sort(path):
+        path = os.path.join(root, path)
+        return os.stat(path).__getattribute__("st_%s" % timestamp)
+    return sort
+
                         
 def main():
     module = AnsibleModule(
             argument_spec   = dict(
                 path        = dict(required=True, aliases=['name'], type='str'),
                 age         = dict(default=0, type='str'),
+                number      = dict(default=0, type='int'),
                 force       = dict(default='no', type='bool'),
                 matches     = dict(default=None, type='list'),
                 recurse     = dict(default='no', type='bool'),
@@ -176,13 +189,16 @@ def main():
     
     if os.path.isdir(params['path']):
         for root,dirs,files in os.walk( params['path'] ):
+            files.sort(key=sortFiles(root, params['timestamp']), reverse=True)
+            current_count = 0
             for fsobj in dirs + files:
                 fsname=os.path.normpath(os.path.join(root, fsobj))
                 if os.path.isdir(fsname):
                     if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and params['rmdirs']:
                         dirs_to_delete.append(fsname)
                 elif os.path.isfile(fsname):
-                    if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and sizefilter(fsname, size):
+                    current_count += 1
+                    if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and sizefilter(fsname, size) and numberfilter(fsname, current_count, params['number']):
                         files_to_delete.append(fsname)
             if not params['recurse']: 
                 break
