@@ -12,7 +12,7 @@
     silent: "{{ tidy_silent | default(omit) }}"
     size: "{{ tidy_size | default(omit) }}"
     timestamp: "{{ tidy_timestamp | default(omit) }}"
-    number: "{{ tidy_number | default(omit) }}"
+    keep: "{{ tidy_keep | default(omit) }}"
   when: tidy_local_action is defined and tidy_local_action == true
 
 - name: "Run tidy remotely"
@@ -26,5 +26,5 @@
     silent: "{{ tidy_silent | default(omit) }}"
     size: "{{ tidy_size | default(omit) }}"
     timestamp: "{{ tidy_timestamp | default(omit) }}"
-    number: "{{ tidy_number | default(omit) }}"
+    keep: "{{ tidy_keep | default(omit) }}"
   when: tidy_local_action is not defined or (tidy_local_action is defined and tidy_local_action == false)

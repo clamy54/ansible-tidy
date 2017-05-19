@@ -8,4 +8,4 @@
     tidy_path: tests/files
     tidy_local_action: true
     tidy_recurse: true
-    tidy_number: 2
+    tidy_keep: 2

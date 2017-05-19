@@ -91,6 +91,12 @@ options:
         choices: [ "atime", "mtime", "ctime" ]
         description:
             - Set the mechanism for determining age. Default is atime.
+    keep:
+        required: false
+        default: "0"
+        description:
+            - Keep x files, delete all the others. Works with recurse, it will keep x files in each folder if recurse=yes. 
+              Files are ordered before tidying up, using the `timestamp` param, so you can delete older files. Specifying 0 will remove all files.
 '''
 
 
@@ -106,6 +112,9 @@ EXAMPLES = '''
 
 # Delete on /var/log files equal or greater than 10 megabytes ending with .log or .log.gz
 - tidy: path="/var/tmp" matches="*.log","*.log.gz" size="10m"
+
+# Keep 10 files in /var/service/logs, delete all the others
+- tidy: path="/var/service/logs" keep="10"
 '''
 
 
@@ -132,9 +141,9 @@ def sizefilter(path, size=0):
         return True
     return False
 
-def numberfilter(path, current_number, limit_number=0):
-    '''filter files whose count is bigger limit_number'''
-    if limit_number == 0 or current_number > limit_number:
+def numberfilter(path, current_file_number, keep=0):
+    '''filter files whose count is bigger than keep'''
+    if keep == 0 or current_file_number > keep:
         return True
     return False
 
@@ -150,7 +159,7 @@ def main():
             argument_spec   = dict(
                 path        = dict(required=True, aliases=['name'], type='str'),
                 age         = dict(default=0, type='str'),
-                number      = dict(default=0, type='int'),
+                keep        = dict(default=0, type='int'),
                 force       = dict(default='no', type='bool'),
                 matches     = dict(default=None, type='list'),
                 recurse     = dict(default='no', type='bool'),
@@ -190,15 +199,15 @@ def main():
     if os.path.isdir(params['path']):
         for root,dirs,files in os.walk( params['path'] ):
             files.sort(key=sortFiles(root, params['timestamp']), reverse=True)
-            current_count = 0
+            current_file_count = 0
             for fsobj in dirs + files:
                 fsname=os.path.normpath(os.path.join(root, fsobj))
                 if os.path.isdir(fsname):
                     if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and params['rmdirs']:
                         dirs_to_delete.append(fsname)
                 elif os.path.isfile(fsname):
-                    current_count += 1
-                    if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and sizefilter(fsname, size) and numberfilter(fsname, current_count, params['number']):
+                    current_file_count += 1
+                    if pfilter(fsobj, params['matches']) and agefilter(fsname, age, params['timestamp']) and sizefilter(fsname, size) and numberfilter(fsname, current_file_count, params['keep']):
                         files_to_delete.append(fsname)
             if not params['recurse']: 
                 break

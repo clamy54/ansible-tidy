@@ -82,11 +82,11 @@ Size is not evaluated for directories.</td>
 <td>Set the mechanism for determining age. Default is atime.</td>
 </tr>
 <tr>
-<td>number</td>
+<td>keep</td>
 <td>no</td>
 <td>0</td>
 <td></td>
-<td>>Tidy files which are over a determined number (in other words, keep x files in each folder, delete all the others). Files are ordered before tidying up, using the `timestamp` param, so you can delete older files. Specifying 0 will remove all files.</td>
+<td>Keep x files, delete all the others. Works with recurse, it will keep x files in each folder if recurse=yes. Files are ordered before tidying up, using the `timestamp` param, so you can delete older files. Specifying 0 will remove all files.</td>
 </tr>
 </table>  
 
@@ -107,7 +107,7 @@ Size is not evaluated for directories.</td>
 - tidy: path="/var/tmp" matches="*.log","*.log.gz" size="10m"
 
 # Keep 10 files in /var/service/logs, delete all the others
-- tidy: path="/var/service/logs" number="10"
+- tidy: path="/var/service/logs" keep="10"
 ```
 
 
