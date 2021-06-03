@@ -106,7 +106,7 @@ Size is not evaluated for directories.</td>
 - hosts: all
 
   roles:
-    - role: maxgalbu.tidy
+    - role: ansible-tidy
 
   vars:
     tidy_path: tests/files
