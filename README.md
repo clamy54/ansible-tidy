@@ -3,15 +3,14 @@ ansible-tidy
 
 Tidy role for Ansible, inspired by Puppet's tidy module. Remove unwanted files based on specific criteria.  
 Multiple criteria are AND’d together
+This is a fork of https://github.com/maxgalbu/ansible-tidy that works with Python 3
 
 Installation
 ------------
 
-ansible-tidy is an Ansible role distributed globally using [Ansible Galaxy](https://galaxy.ansible.com/). In order to install Ansistrano role you can use the following command.
+This role isn't distributed using Ansible Galaxy.
+Clone the repo under your roles folder instead.
 
-```
-$ ansible-galaxy install maxgalbu.tidy
-```
 
 New in version: 1.7
 
